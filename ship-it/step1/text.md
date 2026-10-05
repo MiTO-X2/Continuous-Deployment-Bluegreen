@@ -13,9 +13,9 @@ Look at the app and its version file:
 
 Run it the old-fashioned way (foreground, manual — the thing we are about to kill):
 
-````bash
 cd ~/tutorial
 nohup python3 app/app.py 5000 >/tmp/app.log 2>&1 &
+
 ```{{exec}}
 
 Probe its two **telemetry endpoints**:
@@ -32,4 +32,4 @@ Probe its two **telemetry endpoints**:
 Stop the manual process — you will never start it by hand again:
 
 `pkill -f "app.py 5000"`{{exec}}
-````
+```
