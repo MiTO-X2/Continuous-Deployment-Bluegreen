@@ -57,7 +57,19 @@ Developer
                          Browser :8080
 ```
 
-![CI/CD blue-green architecture]\(assets/architecture.png\)
+![CI/CD blue-green architecture](assets/architecture.png)
+
+flowchart TD
+Dev([Developer]) -->|git commit| Pipeline
+subgraph Pipeline [CI/CD Pipeline]
+Test --> Build --> Version --> Deploy
+end
+Deploy --> Nginx
+Nginx -->|traffic| Blue[app-blue :8081]
+Nginx -->|traffic| Green[app-green :8082]
+Blue -.->|idle/live| Nginx
+Green -.->|live/idle| Nginx
+Browser([Browser :8080]) --> Nginx
 
 How the components interact: Git provides the source change to the pipeline. The pipeline runs tests and builds a versioned artifact. During deployment, the artifact is started in whichever application slot is currently idle. The smoke test communicates directly with that slot to verify it. Only after verification succeeds does flip.sh update nginx's upstream configuration. nginx then reloads its configuration and begins sending user requests to the new slot. Because the previous slot remains available, rollback can restore the previous upstream configuration.
 
