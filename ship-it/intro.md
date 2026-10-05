@@ -26,13 +26,13 @@ Developer
 ┌─────────────────────────────────────────────────────────────┐
 │                    Disposable Ubuntu VM                     │
 │                                                             │
-│  ~/tutorial                                                │
+│  ~/tutorial                                                 │
 │  ┌───────────────────────────────────────────────────────┐  │
-│  │                 CI/CD pipeline                       │  │
+│  │                 CI/CD pipeline                        │  │
 │  │                                                       │  │
-│  │  TEST ───► BUILD ───► VERSION ───► DEPLOY            │  │
-│  │    │          │                         │              │  │
-│  │    │          ▼                         ▼              │  │
+│  │  TEST ───► BUILD ───► VERSION ───► DEPLOY             │  │
+│  │    │          │                         │             │  │
+│  │    │          ▼                         ▼             │  │
 │  │  unit tests   app:N                 blue / green      │  │
 │  └───────────────────────────────────────────────────────┘  │
 │                                             │               │
