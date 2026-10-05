@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # step2/verify.sh — continuous integration: app:2 was built and versioned,
 # and the pipeline stopped BEFORE any deployment (the CI boundary).
-# Exit 0 = step complete. (Verify scripts run repeatedly: keep read-only and fast.)
+# Exit 0 = step complete.
 
 # 1. The versioned artifact exists.
 docker image inspect app:2 >/dev/null 2>&1 || exit 1

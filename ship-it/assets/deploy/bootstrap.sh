@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Creates production from scratch: network, blue env (v1), proxy on :8080.
+# Creates production from scratch: network, blue env (v1), proxy on :8080
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE="$ROOT/.prod"
@@ -9,7 +9,7 @@ rm -f "$STATE/candidate"
 docker network create cdnet 2>/dev/null || true
 docker rm -f app-blue app-green proxy 2>/dev/null || true
 
-# The pipeline (Step 2) built app:2; production starts from the INITIAL commit (v1).
+# The pipeline (Step 2) built app:2; production starts from the INITIAL commit (v1)
 if ! docker image inspect app:1 >/dev/null 2>&1; then
   ROOT_COMMIT=$(git rev-list --max-parents=0 HEAD 2>/dev/null | head -n1 || true)
   if [ -z "$ROOT_COMMIT" ]; then

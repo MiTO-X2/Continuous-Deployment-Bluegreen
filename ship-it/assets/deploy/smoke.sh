@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# smoke.sh BASE_URL EXPECTED_VERSION — the pipeline's telemetry gate.
-# Polls until the service answers healthy AND serves the expected version.
-# Note: deliberately no `set -e` — failed attempts are the normal case here.
+# smoke.sh BASE_URL EXPECTED_VERSION — the pipeline's telemetry gate
+# Polls until the service answers healthy AND serves the expected version
+# Note: deliberately no `set -e` — failed attempts are the normal case here
 set -u
 URL="${1:-}"
 WANT="${2:-}"

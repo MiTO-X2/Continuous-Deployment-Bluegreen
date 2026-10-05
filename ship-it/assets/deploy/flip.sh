@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Repoints the proxy at a color and reloads nginx. This file is the production change.
+# Repoints the proxy at a color and reloads nginx
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE="$ROOT/.prod"
@@ -29,7 +29,7 @@ if ! docker exec proxy nginx -s reload; then
   echo "X  nginx refused the new configuration - traffic unchanged ($LIVE)"; exit 1
 fi
 
-# Wait until the new configuration actually serves a healthy response.
+# Wait until the new configuration actually serves a healthy response
 ok=0
 for i in $(seq 1 10); do
   if curl -sf --max-time 2 http://127.0.0.1:8080/health >/dev/null; then ok=1; break; fi

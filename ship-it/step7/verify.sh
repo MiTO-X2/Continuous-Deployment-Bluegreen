@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # step7/verify.sh — rollback: v5 shipped to green, traffic came back to v3.
 # Users are on v3 (blue); the rolled-back v5 still runs on green, offline.
-# Exit 0 = step complete. (Verify scripts run repeatedly: keep read-only and fast.)
+# Exit 0 = step complete.
 
 # Users are back on the previous release, served by blue through the proxy.
 RESP=$(curl -sf --max-time 2 http://127.0.0.1:8080/version 2>/dev/null || true)

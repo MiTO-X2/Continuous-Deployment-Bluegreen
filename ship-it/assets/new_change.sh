@@ -12,7 +12,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT"
 [ -d "$ROOT/app" ] || { echo "X  app/ not found next to new_change.sh - run me from the tutorial repo root"; exit 1; }
 
-# --- validate everything BEFORE mutating anything ---------------------------
+# validate everything BEFORE mutating anything
 V="${1:?usage: new_change.sh VERSION [--broken] [--beta]}"; shift
 [[ "$V" =~ ^[0-9]+$ ]] || { echo "X  VERSION must be a plain number, e.g. 2 (found '$V')"; exit 1; }
 for a in "$@"; do
@@ -22,7 +22,7 @@ for a in "$@"; do
   esac
 done
 
-# --- apply the change ---------------------------------------------------------
+# apply the change
 echo "$V" > app/VERSION
 rm -f app/BROKEN app/BETA_ON
 for a in "$@"; do
@@ -32,7 +32,7 @@ for a in "$@"; do
   esac
 done
 
-# --- commit -------------------------------------------------------------------
+# commit
 # Runtime state (.prod/) and bytecode (__pycache__) must never enter git.
 if [ ! -f .gitignore ]; then
   printf '%s\n' '__pycache__/' '*.pyc' '.prod/' > .gitignore

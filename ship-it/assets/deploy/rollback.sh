@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Instant rollback = flip back to the previous, still-running environment.
+# Instant rollback = flip back to the previous, still-running environment
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE="$ROOT/.prod"
@@ -10,7 +10,7 @@ LIVE=$(cat "$STATE/live_color")
 [ "$LIVE" = blue ] && OTHER=green || OTHER=blue
 PORT=$([ "$OTHER" = blue ] && echo 8081 || echo 8082)
 
-# A pending, unapproved candidate is not a rollback target.
+# A pending, unapproved candidate is not a rollback target
 if [ -f "$CANDIDATE" ]; then
   read -r C_COLOR C_V < "$CANDIDATE"
   if [ "$C_COLOR" = "$OTHER" ]; then

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Blue-green release of one version to the idle color, with verification gate.
+# Blue-green release of one version to the idle color, with verification gate
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE="$ROOT/.prod"
@@ -23,7 +23,7 @@ PORT=$([ "$IDLE" = blue ] && echo 8081 || echo 8082)
 
 echo "live=$LIVE  idle=$IDLE  ->  deploying v$V to $IDLE (users unaffected)"
 
-# Configuration is code: container env is derived from files versioned in the repo.
+# Configuration is code: container env is derived from files versioned in the repo
 BROKEN=false; [ -f "$ROOT/app/BROKEN" ] && BROKEN=true
 BETA=off;     [ -f "$ROOT/app/BETA_ON" ] && BETA=on
 

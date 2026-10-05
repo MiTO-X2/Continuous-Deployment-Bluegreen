@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # step6/verify.sh — the verification gate stopped the broken release:
 # users are still on v3 (blue) and the failed green environment is gone.
-# Exit 0 = step complete. (Verify scripts run repeatedly: keep read-only and fast.)
+# Exit 0 = step complete.
 
 RESP=$(curl -sf --max-time 2 http://127.0.0.1:8080/version 2>/dev/null || true)
 V=$(printf '%s' "$RESP" | sed -n 's/.*"version": *"\([0-9]*\)".*/\1/p')

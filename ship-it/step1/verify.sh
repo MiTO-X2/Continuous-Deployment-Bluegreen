@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # step1/verify.sh — the learner ran the Demo Shop locally and it is serving.
-# Exit 0 = step complete. (Verify scripts run repeatedly: keep read-only and fast.)
+# Exit 0 = step complete.
 
 # Primary signal: the app answers on its default port.
 if curl -sf --max-time 2 http://127.0.0.1:5000/health 2>/dev/null | grep -q '"ok"'; then
