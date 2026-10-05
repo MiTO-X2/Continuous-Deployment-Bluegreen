@@ -18,45 +18,6 @@ The goal of this tutorial is to understand **why** that can work — and what ha
 
 A complete, automated delivery system for a small web service called **Demo Shop**.
 
-```text
-Developer
-   │
-   │ git commit
-   ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    Disposable Ubuntu VM                     │
-│                                                             │
-│  ~/tutorial                                                 │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │                 CI/CD pipeline                        │  │
-│  │                                                       │  │
-│  │  TEST ───► BUILD ───► VERSION ───► DEPLOY             │  │
-│  │    │          │                         │             │  │
-│  │    │          ▼                         ▼             │  │
-│  │  unit tests   app:N                 blue / green      │  │
-│  └───────────────────────────────────────────────────────┘  │
-│                                             │               │
-│                                             ▼               │
-│                                  ┌───────────────────┐      │
-│                                  │   nginx :8080     │      │
-│                                  │  traffic router   │      │
-│                                  └─────────┬─────────┘      │
-│                                            │                │
-│                              ┌─────────────┴─────────────┐  │
-│                              ▼                           ▼  │
-│                       ┌─────────────┐             ┌─────────────┐
-│                       │  app-blue   │             │  app-green  │
-│                       │    :8081    │             │    :8082    │
-│                       └─────────────┘             └─────────────┘
-│                              ▲                           ▲
-│                              │                           │
-│                         idle / live                 live / idle
-└─────────────────────────────────────────────────────────────┘
-                              ▲
-                              │
-                         Browser :8080
-```
-
 <img src="./assets/architecture.jpg" alt="CI/CD pipeline architecture">
 
 **Figure 1.** The tutorial's CI/CD architecture. A commit triggers testing, building, versioning, and deployment inside a disposable Ubuntu VM. nginx acts as the only user-facing entry point and switches traffic between the blue and green application slots.
