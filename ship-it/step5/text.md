@@ -14,6 +14,8 @@ Commit v3 and let it flow through, untouched by human hands:
 
 (`APPROVAL` defaults to `auto`.) Observe: deploy to blue → verify on `:8081` → **flip without asking** → re-verify through the proxy → done.
 
+Refresh [the shop]({{TRAFFIC_HOST1_8080}}): blue background, v3
+
 `curl -s localhost:8080/version`{{exec}}
 
 > **Why would anyone accept that risk?** Because the gate is not removed — it is
