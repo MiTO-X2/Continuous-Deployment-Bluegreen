@@ -61,65 +61,9 @@
   "assets": {
     "host01": [
       {
-        "file": "app/app.py",
-        "target": "~/tutorial/app/"
-      },
-      {
         "file": "app/VERSION",
-        "target": "~/tutorial/app/",
+        "target": "/root/tutorial/app/",
         "chmod": "+w"
-      },
-      {
-        "file": "app/Dockerfile",
-        "target": "~/tutorial/app/"
-      },
-      {
-        "file": "app/tests/test_app.py",
-        "target": "~/tutorial/app/tests/"
-      },
-      {
-        "file": "ci/pipeline.sh",
-        "target": "~/tutorial/ci/",
-        "chmod": "+x"
-      },
-      {
-        "file": "deploy/bootstrap.sh",
-        "target": "~/tutorial/deploy/",
-        "chmod": "+x"
-      },
-      {
-        "file": "deploy/deploy.sh",
-        "target": "~/tutorial/deploy/",
-        "chmod": "+x"
-      },
-      {
-        "file": "deploy/flip.sh",
-        "target": "~/tutorial/deploy/",
-        "chmod": "+x"
-      },
-      {
-        "file": "deploy/approve.sh",
-        "target": "~/tutorial/deploy/",
-        "chmod": "+x"
-      },
-      {
-        "file": "deploy/rollback.sh",
-        "target": "~/tutorial/deploy/",
-        "chmod": "+x"
-      },
-      {
-        "file": "deploy/smoke.sh",
-        "target": "~/tutorial/deploy/",
-        "chmod": "+x"
-      },
-      {
-        "file": "deploy/nginx.server.template",
-        "target": "~/tutorial/deploy/"
-      },
-      {
-        "file": "new_change.sh",
-        "target": "~/tutorial/",
-        "chmod": "+x"
       }
     ]
   }
