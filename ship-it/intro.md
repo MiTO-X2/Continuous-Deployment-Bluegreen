@@ -57,7 +57,7 @@ Developer
                          Browser :8080
 ```
 
-![alt text](assets/architecture.jpg)
+![alt text]\(assets/architecture.jpg)
 
 **Figure 1.** The tutorial's CI/CD architecture. A commit triggers testing, building, versioning, and deployment inside a disposable Ubuntu VM. nginx acts as the only user-facing entry point and switches traffic between the blue and green application slots.
 
