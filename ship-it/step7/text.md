@@ -31,6 +31,8 @@ Two things made this cheap:
 - **Immutable artifacts:** `app:3` still exists, untouched.
 - **Config-as-code flip:** the "rollback" is one rendered nginx template plus a reload.
 
+Seeing not found in the shop tab? Your browser is still on the /beta page — and v3 doesn't have that route. That's the rollback working: the feature is gone. Head back to the shop root (/) and you'll see v3 alive and well.
+
 > **Adage 2 — The Cost of Change Is Dead.** Boehm's curve (fixes get ~10x more
 > expensive per phase) flattens when development and production happen "the same
 > day by the same person": you released v5 five minutes ago, you remember exactly
