@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Atomically repoints the proxy at a color. This file is the production change.
+# Repoints the proxy at a color and reloads nginx. This file is the production change.
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE="$ROOT/.prod"

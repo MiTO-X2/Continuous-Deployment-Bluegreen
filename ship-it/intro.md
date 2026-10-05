@@ -2,7 +2,7 @@
 
 ## The problem
 
-It's 18:00 on a Friday. Your team releases once a month, by hand: someone SSHes to a server, stops the app, copies files, edits configuration, restarts, and prays. Every release is a small lottery.
+It's 17:00 on a Friday. Your team releases once a month, by hand: someone SSHes to a server, stops the app, copies files, edits configuration, restarts, and prays. Every release is a small lottery.
 
 Boehm's classic software-engineering economics argues that defects generally become more expensive to fix when they are discovered later in the development lifecycle. One response has historically been to release less often, which can make each release larger and riskier.
 

@@ -1,6 +1,9 @@
-#!/bin/bash
-curl -sf localhost:5000/health 2>/dev/null | grep -q '"status": "ok"' \
-  || curl -sf localhost:5000/health | grep -q ok || pgrep -f app.py >/dev/null
-# pass if we ran the app at least once or it's still running
-test -f ~/tutorial/app/VERSION && exit 0
-exit 1
+#!/usr/bin/env bash
+
+curl -sf http://127.0.0.1:5000/health \
+  | grep -q '"status": "ok"' || exit 1
+
+curl -sf http://127.0.0.1:5000/version \
+  | grep -q '"version":' || exit 1
+
+exit 0

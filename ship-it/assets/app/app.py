@@ -5,7 +5,8 @@ import json, os, sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-VERSION = open(os.path.join(HERE, "VERSION")).read().strip()
+with open(os.path.join(HERE, "VERSION")) as f:
+    VERSION = f.read().strip()
 COLOR = os.environ.get("COLOR", "unknown")
 BROKEN = os.environ.get("BROKEN", "false") == "true"      # simulates bad prod config
 FEATURE_BETA = os.environ.get("FEATURE_BETA", "off") == "on"
@@ -25,7 +26,7 @@ class H(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/health":
             if BROKEN:
-                self._send(500, '{"status": "unhealthy"}', "application/json")
+                self._send(500, json.dumps({"status": "unhealthy"}), "application/json")
             else:
                 self._send(200, json.dumps({"status": "ok", "version": VERSION}), "application/json")
         elif self.path == "/version":

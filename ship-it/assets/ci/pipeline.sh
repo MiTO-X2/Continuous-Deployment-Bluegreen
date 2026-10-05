@@ -17,7 +17,7 @@ fi
 grep -E "Ran [0-9]+ test|OK" /tmp/test.log || true
 echo "   tests passed"
 
-echo "=== [3/4] BUILD     | packaging immutable artifact: docker image app:$V"
+echo "=== [3/4] BUILD     | packaging versioned artifact: docker image app:$V"
 docker build -q -t "app:$V" app >/dev/null
 echo "   image app:$V registered"
 

@@ -14,9 +14,9 @@ You built and operated a small **continuous delivery/deployment system** and exp
 | **Dark launch / feature flag** | v5's beta feature was deployed before being exposed to users (Step 7).                                              |
 | **Instant rollback**           | One command switched traffic back to the previous version (Step 7).                                                 |
 
-## The DevOps principles that was encountered
+## The DevOps principles you encountered
 
-Throughout the tutorial, we worked with all ten adages from _The Top 10 Adages in Continuous Deployment_:
+Throughout the tutorial, you worked with all ten adages from _The Top 10 Adages in Continuous Deployment_:
 
 1. **Every Feature Is an Experiment** — telemetry and automated verification.
 2. **The Cost of Change Is Dead** — small, frequent, recoverable releases.
