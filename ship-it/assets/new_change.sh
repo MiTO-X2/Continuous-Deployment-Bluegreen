@@ -4,9 +4,13 @@
 #   VERSION   plain number written to app/VERSION (e.g. 2)
 #   --broken  ship a bad production config (invisible to unit tests, caught by smoke tests)
 #   --beta    enable the beta feature flag (dark launch)
+#
+# NOTE: unlike the ci/ and deploy/ scripts, this file lives at the REPO ROOT,
+# so ROOT is the script's own directory - no /.. .
 set -euo pipefail
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT"
+[ -d "$ROOT/app" ] || { echo "X  app/ not found next to new_change.sh - run me from the tutorial repo root"; exit 1; }
 
 # --- validate everything BEFORE mutating anything ---------------------------
 V="${1:?usage: new_change.sh VERSION [--broken] [--beta]}"; shift
