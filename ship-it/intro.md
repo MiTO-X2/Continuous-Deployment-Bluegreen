@@ -57,19 +57,46 @@ Developer
                          Browser :8080
 ```
 
-![CI/CD blue-green architecture](assets/architecture.png)
+```mermaid
+graph TD
+    Dev["Developer"] -->|git commit| TEST
 
-flowchart TD
-Dev([Developer]) -->|git commit| Pipeline
-subgraph Pipeline [CI/CD Pipeline]
-Test --> Build --> Version --> Deploy
-end
-Deploy --> Nginx
-Nginx -->|traffic| Blue[app-blue :8081]
-Nginx -->|traffic| Green[app-green :8082]
-Blue -.->|idle/live| Nginx
-Green -.->|live/idle| Nginx
-Browser([Browser :8080]) --> Nginx
+    subgraph VM["Disposable Ubuntu VM"]
+        subgraph PIPE["~/tutorial: CI/CD pipeline"]
+            TEST["TEST<br/>unit tests"]
+            BUILD["BUILD<br/>app:N"]
+            VERSION["VERSION"]
+            DEPLOY["DEPLOY<br/>blue / green"]
+            VERIFY["VERIFY<br/>smoke test"]
+            FLIP["RELEASE<br/>flip nginx"]
+
+            TEST --> BUILD
+            BUILD --> VERSION
+            VERSION --> DEPLOY
+            DEPLOY --> VERIFY
+            VERIFY -->|passed| FLIP
+        end
+
+        FLIP --> NGINX["nginx :8080<br/>traffic router"]
+
+        NGINX -->|live / idle| BLUE["app-blue :8081"]
+        NGINX -->|idle / live| GREEN["app-green :8082"]
+
+        DEPLOY -.->|deploy to idle slot| BLUE
+        DEPLOY -.->|deploy to idle slot| GREEN
+
+        VERIFY -.->|check candidate| BLUE
+        VERIFY -.->|check candidate| GREEN
+    end
+
+    Browser["Browser :8080"] --> NGINX
+
+    style BLUE fill:#cce5ff,stroke:#3366cc
+    style GREEN fill:#ccffcc,stroke:#339966
+    style NGINX fill:#fff3cd,stroke:#cc9900
+    style VERIFY fill:#e8f5e9,stroke:#339966
+    style FLIP fill:#fce4ec,stroke:#c2185b
+```
 
 How the components interact: Git provides the source change to the pipeline. The pipeline runs tests and builds a versioned artifact. During deployment, the artifact is started in whichever application slot is currently idle. The smoke test communicates directly with that slot to verify it. Only after verification succeeds does flip.sh update nginx's upstream configuration. nginx then reloads its configuration and begins sending user requests to the new slot. Because the previous slot remains available, rollback can restore the previous upstream configuration.
 
