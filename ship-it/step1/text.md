@@ -14,8 +14,7 @@ Look at the app and its version file:
 
 Run it the old-fashioned way (foreground, manual — the thing we are about to kill):
 
-cd ~/tutorial
-nohup python3 app/app.py 5000 >/tmp/app.log 2>&1 &
+`cd ~/tutorial && nohup python3 app/app.py 5000 >/tmp/app.log 2>&1 &`{{exec}}
 
 Probe its two **telemetry endpoints**:
 
