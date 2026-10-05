@@ -16,20 +16,17 @@ Run it the old-fashioned way (foreground, manual — the thing we are about to k
 cd ~/tutorial
 nohup python3 app/app.py 5000 >/tmp/app.log 2>&1 &
 
-```{{exec}}
-
 Probe its two **telemetry endpoints**:
 
-`curl -s localhost:5000/health`{{exec}}
+`curl -s localhost:5000/health; echo`{{exec}}
 
-`curl -s localhost:5000/version`{{exec}}
+`curl -s localhost:5000/version; echo`{{exec}}
 
 > **Adage 1 — Every Feature Is an Experiment.** These endpoints are not
-> decoration. The adages paper shows companies instrument *everything* with a
+> decoration. The adages paper shows companies instrument _everything_ with a
 > "telemetry-first mindset" so deployments can be verified with data. Our whole
 > pipeline will make decisions based on these two tiny JSON responses.
 
-Stop the manual process — you will never start it by hand again:
-
-`pkill -f "app.py 5000"`{{exec}}
-```
+Leave the service running — the completion check for this step probes `:5000`
+and only turns green while the service you started is actually serving.
+This hand-started process gets its farewell in the next step.
