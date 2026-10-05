@@ -57,6 +57,10 @@ Developer
                          Browser :8080
 ```
 
+![CI/CD blue-green architecture](assets/architecture.png)
+
+How the components interact: Git provides the source change to the pipeline. The pipeline runs tests and builds a versioned artifact. During deployment, the artifact is started in whichever application slot is currently idle. The smoke test communicates directly with that slot to verify it. Only after verification succeeds does flip.sh update nginx's upstream configuration. nginx then reloads its configuration and begins sending user requests to the new slot. Because the previous slot remains available, rollback can restore the previous upstream configuration.
+
 The important idea is that **only nginx receives user traffic**. The pipeline deploys the new version to the idle environment, verifies it, and then changes the proxy configuration to switch traffic.
 
 This gives us two distinct decisions:
