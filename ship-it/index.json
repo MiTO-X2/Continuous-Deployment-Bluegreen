@@ -36,7 +36,8 @@
         { "file": "deploy/rollback.sh", "target": "/root/tutorial/deploy/", "chmod": "+x" },
         { "file": "deploy/smoke.sh", "target": "/root/tutorial/deploy/", "chmod": "+x" },
         { "file": "deploy/nginx.server.template", "target": "/root/tutorial/deploy/" },
-        { "file": "new_change.sh", "target": "/root/tutorial/", "chmod": "+x" }
+        { "file": "new_change.sh", "target": "/root/tutorial/", "chmod": "+x" },
+        { "file": "architecture.png", "target": "~/tutorial/" }
       ]
     }
   },
