@@ -1,45 +1,57 @@
-# Step 8 — Reflection: when, when not, for whom
+# Step 8 — Continuous Integration for real: every commit triggers the pipeline
 
-**What:** no new machinery — judgment.
+**What:** install a Git hook so that committing a change starts the pipeline automatically, with nobody typing `./ci/pipeline.sh`.
 
-**Why:** a DevOps engineer recommends practices; they do not worship them.
+**Why:** until now *you* started every pipeline run. That is a hidden manual step, and manual steps get forgotten, skipped on a busy Friday, or run on a different version than the one that was committed. Continuous Integration means the check happens on **every** change, whether or not anybody remembers to run it. Look back at Figure 1: the arrow from *git commit* into the pipeline is the thing we are building now.
 
-### Design decisions made in this tutorial (and why)
+### Install the trigger
 
-- **Shell-script CI instead of Jenkins/GitHub Actions:** those are the right tools in many real environments, but they require additional setup and can hide some of the mechanics we want to learn. Here, the pipeline is short and readable, while the concepts transfer to almost any CI/CD platform.
+A Git hook is a script that Git runs at a defined moment. The `post-commit` hook runs right after every commit. Install it **before** you make the next commit, because a commit made earlier never triggers anything:
 
-- **Blue-green over recreate, rolling, or canary:** recreate deployments can cause downtime; rolling deployments can make rollback more involved; canary deployments require additional traffic-splitting and metrics-analysis infrastructure. Blue-green gives us a simple traffic switch and fast rollback at the scale of this tutorial.
+`cd ~/tutorial && ./ci/install_hook.sh`{{exec}}
 
-- **Smoke tests as the release gate:** the pipeline uses observable health data that automation can act on (Adage 1), rather than relying on a human spot-check after deployment.
+You should see `post-commit hook installed: every commit now triggers CI`. Look at what was installed:
 
-- **Configuration as code:** templates, scripts, and Git keep deployment configuration reproducible and versioned instead of relying on hand-edited servers (Adage 6).
+`cat ~/tutorial/.git/hooks/post-commit`{{exec}}
 
-### When this approach is useful
+It is two lines: go to the repository root, then run `./ci/pipeline.sh --ci-only`. Two choices are worth noticing:
 
-This approach works particularly well for web services and SaaS applications with strong automated-test coverage; teams that own features cradle-to-grave (Adage 5); organizations under competitive pressure to deliver continuously (Adage 10 — your competitor ships daily); and teams willing to _invest for survival_ in deployment and testing automation (Adage 4).
+- **`--ci-only`:** the hook tests, builds and versions, but it **never deploys**. This is the boundary from Step 2 again. Integrating a change should be automatic and cheap; releasing it to users is a separate decision (Steps 4 and 5). This is "fast to deploy, slow to release" (Adage 3) applied to the trigger.
+- **Foreground:** the commit waits until the pipeline has finished, so the result appears on your screen right below the commit. Real CI servers run builds in the background and report back afterwards. This hook trades that convenience for visibility, which is what we want while learning.
 
-### When it is NOT (or not yet)
+### Make a change and watch it happen
 
-- **Regulated or safety-critical domains:** some systems require additional validation, approvals, traceability, or controlled release procedures. In these environments, the continuous delivery mode from Step 4 can retain a manual approval gate as an explicit compliance checkpoint.
+Commit a new version. Do **not** run the pipeline yourself:
 
-- **Enterprise/on-premise customers:** _Adage 7 — Comfort the Customer with Discomfort._ Customers that control their own infrastructure may have lengthy integration and validation processes and may not be able to absorb daily updates. A practical compromise can be to release frequently to _your_ cloud while allowing customers to upgrade their _own_ premises on a slower schedule.
+`cd ~/tutorial && ./new_change.sh 6`{{exec}}
 
-- **Stateful schema migrations:** blue-green deployment does not by itself solve the problem of two application versions sharing one database. Safe schema evolution may require expand/contract migrations and backward-compatible application changes, which are deliberately outside this tutorial.
+The commit takes a few seconds. Right after Git records it, the pipeline output appears by itself: `[1/4] TEST`, `[2/4] BUILD` and `[3/4] VERSION`, the same stages as in Step 2, ending in `CI COMPLETE | app:6 tested, built and versioned`. Then the script prints its own `committed:` line. You typed one command, the commit did the rest.
 
-- **Monoliths with thin test coverage:** automating the release gate without sufficient tests does not make releases safer. It can simply automate the path to an outage.
+Confirm that the artifact exists and that production did not move:
 
-### For whom
+`docker images app`{{exec}}
 
-Small teams can get significant leverage from automation: one repeatable pipeline can replace many manual release steps. Large organizations can use the same principles to make deployment safer and more consistent at scale. For a solo developer, the continuous delivery mode alone can provide much of the value without requiring fully automatic production deployment.
+`curl -s localhost:8080/version; echo`{{exec}}
 
-### Looking back to move forward (Adage 8)
+You should see `app:6` in the image list, while users are still on v3 served by blue. A commit produced a tested, versioned artifact and changed nothing in production, because deployment stays a separate decision.
 
-Every release here is associated with a Git commit — your _retrospective_ data already exists:
+> **If `new_change.sh` says "nothing to commit":** v6 is already committed in this session, so no hook fired. Run `git commit --allow-empty -m "trigger CI"` to see the hook work, or continue with the next version number.
 
-`git -C ~/tutorial log --oneline`{{exec}}
+### What happens when CI fails?
 
-In real teams, blameless postmortems on pipeline failures can be used to improve the pipeline itself.
+A `post-commit` hook runs after the commit exists, so a failing pipeline **cannot undo it**. You see the error, and the commit stays in the history. That is how CI works in general: it does not prevent a bad change from being committed, it tells you within seconds that the change is bad, while you still remember what you did. Teams then treat a red build as the top priority.
 
-And **Adage 9 — Invite Privacy and Security In:** our pipeline has no security scanning or signed artifacts. A production-grade pipeline would typically add security checks such as dependency scanning, vulnerability scanning, and artifact or image signing **inside** the delivery process rather than treating security as an afterthought.
+### Why this is only a first version
 
-Click **CHECK**, then finish with the recap.
+This hook is a teaching device. It shows the mechanism, but it is weaker than a real CI system in ways worth knowing:
+
+- **It is not shared.** `.git/hooks` is not part of the repository, so a teammate who clones it does not get the hook. A real setup keeps the trigger on a server that everyone's commits reach.
+- **It runs on the developer's machine.** "It works on my machine" is exactly what a CI server exists to remove. A dedicated build server provides a clean, identical environment for every run.
+- **It can be skipped.** A developer who never installed it, or who deletes it, bypasses CI entirely. A server-side trigger cannot be switched off by one person.
+- **It blocks the developer.** The commit waits for the build. With a slow test suite, that becomes unbearable, and it is one reason real CI runs on separate machines.
+
+Real platforms such as Jenkins or GitHub Actions replace the local hook with a **webhook**: the Git server notifies the CI server that a push happened, and the CI server runs the pipeline on its own clean machine. The principle is the same one you just saw, with the trigger moved somewhere reliable.
+
+**Adage 2 — The Cost of Change Is Dead** needs this step. Small, frequent changes are only cheap if checking each one costs nobody any effort. When integration is automatic, a broken commit is found within seconds of being made.
+
+Click **CHECK**, then continue to the final reflection.
